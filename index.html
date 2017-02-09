@@ -35,17 +35,25 @@
 	<div class='panel panel-primary'>
 		<div class='panel-heading'><h3 class='text-center'>K-Means Clustering</h2></div>
 		<div class='panel-body'>
+			<p>Contoh Input Data : </p>
+			<p>N Dimensions (n,m): 2,2</p>
+			<p>Samples : 5.09,5.80,3.24,5.90,1.68,4.90,1.00,3.17,1.48,1.38,2.91,0.20,4.76,0.10,6.32,1.10,7.00,2.83,6.52,4.62</p>
+			<p>Centroids : 1.48,1.38,4.76,0.10</p><br />
+			<p>Keterangan :</p>
+			<p>N Dimensions : Dimensi Array dari data samples dan centroids.<br />Contoh : N Dimension = 2,2, maka samples = [5.09,5.80],[3.24,5.90],[1.68,4.90],[1.00,3.17],[1.48,1.38],[2.91,0.20],[4.76,0.10],[6.32,1.10],[7.00,2.83],[6.52,4.62].<br />centroids = [[1.48,1.38],[4.76,0.10]]</p>
+			<p>Samples : Data yang akan dipartisi</p>
+			<p>Centroids (Optional) : Nilai awal set point pada tiap cluster, bila n,m dimensions 2,2 maka centroid haruslah berisi 2^n float number (4 angka) seperti contoh diatas. Bila tidak diisi, maka centroid akan diambil dari nilai awal samples.<br />Contoh bila N Dimensions : 2,3 maka samples akan sample 2 dimensi dan centroid 3 dimensi [[5.09,5.80],[3.24,5.90],[1.68,4.90]]</p>
 			<h3>Masukkan sumber data</h3>
 			<div class='row'>
 				<div class='col-xs-4 col-sm-4'>
-					<input name='txt_dim' type='text' class='form-control' placeholder='N Dimensions...' value='2'>
+					<input name='txt_dim' type='text' class='form-control' placeholder='N Dimensions...'>
 				</div>
 				<div class='col-xs-4 col-sm-4'>
-					<input name='txt_samples' type='text' class='form-control' placeholder='Samples...' value='5.09,5.80,3.24,5.90,1.68,4.90,1.00,3.17,1.48,1.38,2.91,0.20,4.76,0.10,6.32,1.10,7.00,2.83,6.52,4.62'>
+					<input name='txt_samples' type='text' class='form-control' placeholder='Samples...'>
 				</div>
 				<div class='col-xs-4 col-sm-4'>
 					<div class='input-group'>
-						<input name='txt_centroids' type='text' class='form-control' placeholder='Centroids...' value='1.48,1.38,4.76,0.10'>
+						<input name='txt_centroids' type='text' class='form-control' placeholder='Centroids...'>
 						<span class='input-group-btn'>
 							<button id='btn_hitung' class='btn btn-default' type='button'>Hitung !!!</button>
 						</span>
@@ -54,8 +62,7 @@
 			</div>
 			<br />
 			<p id='samples'></p>
-			<p id='init'></p>
-			<p id='final'></p>
+			<p id='result'></p>
 		</div>
 		<div class='panel-footer text-center'>Created By Eko Junaidi Salam</div>
 	</div>
@@ -64,13 +71,19 @@
 <script>
 	$(function(){		
 		$('#btn_hitung').click(function(){
-			var dim = $('[name="txt_dim"]').val();
-			var str = $('[name="txt_samples"]').val();
-			var str_centroid = $('[name="txt_centroids"]').val();
+			var dim = $('[name="txt_dim"]').val().replace(/ +/g,'').split(',');
+			var str = $('[name="txt_samples"]').val().replace(/ +/g,'');
+			
+			if(dim === '' || str === '' || dim === ' ' || str === ' '){
+				alert('N Dimensions dan Samples harus diisi !!!');
+				return;
+			}
+			
+			var str_centroid = $('[name="txt_centroids"]').val().replace(/ +/g,'');
 			var buff = str.split(',');
 			var samples = [],centroids = [],tmp = [];
 			for(i=0;i<buff.length;i++){
-				if(i != 0 && (i%dim == 0)){
+				if(i != 0 && (i%dim[0] == 0)){
 					samples.push(tmp);
 					tmp = [];
 					tmp.push(parseFloat(buff[i]));
@@ -79,30 +92,40 @@
 				}
 			}
 			samples.push(tmp);
-			//console.log(samples);
-			tmp = [];
-			buff = str_centroid.split(',');
-			for(i=0;i<buff.length;i++){
-				if(i != 0 && (i%dim == 0)){
-					centroids.push(tmp);
-					tmp = [];
-					tmp.push(parseFloat(buff[i]));
-				}else{
-					tmp.push(parseFloat(buff[i]));
+			if(str_centroid.length > 0 && (str_centroid != '' || str_centroid != ' ')){
+				tmp = [];
+				buff = str_centroid.split(',');
+				if(buff.length%dim[1] != 0){
+					alert('Dimensi m : '+dim[1]+' tidak sesuai dengan jumlah data centroid. Jumlah data haruslah 2*'+dim[1]+' bukan '+buff.length+' !!!');
+					return;
+				}
+				for(i=0;i<buff.length;i++){
+					if(i != 0 && (i%dim[0] == 0)){
+						centroids.push(tmp);
+						tmp = [];
+						tmp.push(parseFloat(buff[i]));
+					}else{
+						tmp.push(parseFloat(buff[i]));
+					}
+				}
+				centroids.push(tmp);
+			}else{
+				for(i=0;i<dim[1];i++){
+					centroids.push(samples[i]);
+					console.log('iterasi %d',i);
+					console.log(samples[i]);
 				}
 			}
-			centroids.push(tmp);
-			//console.log(centroids);
-			
-			//var samples = [[5.09,5.80], [3.24,5.90], [1.68,4.90], [1.00,3.17], [1.48,1.38], [2.91,0.20], [4.76,0.10], [6.32,1.10], [7.00,2.83], [6.52,4.62]];
-			//var centroids = [[1.48,1.38],[4.76,0.10]];
+			console.log(samples);
+			console.log(centroids);
 			
 			var k_means = new k_mean_cluster(samples);
 			k_means.initialize(centroids);
 			k_means.calculate();
 			var res = k_means.result();
-			$('#samples').replaceWith('Samples Data : ','('+samples.join(') (')+')<br /><br />');
-			$('#init').replaceWith(res);
+			var t = 'Samples Data : ('+samples.join(') (')+')<br /><br />';
+			$('#samples').replaceWith('<p id="samples">'+t+'</p>');
+			$('#result').replaceWith("<p id='result'>"+res+"</p>");
 		});
 		
 		
