@@ -71,14 +71,17 @@
 <script>
 	$(function(){		
 		$('#btn_hitung').click(function(){
-			var dim = $('[name="txt_dim"]').val().replace(/ +/g,'').split(',');
+			var dim = $('[name="txt_dim"]').val().replace(/ +/g,'');
 			var str = $('[name="txt_samples"]').val().replace(/ +/g,'');
 			
 			if(dim === '' || str === '' || dim === ' ' || str === ' '){
 				alert('N Dimensions dan Samples harus diisi !!!');
 				return;
+			}else if(!dim.match(/[\d,.]/g) || !str.match(/[\d,.]/g)){
+				alert('Data haruslah number atau float !!!');
+				return;
 			}
-			
+			dim = dim.split(',');
 			var str_centroid = $('[name="txt_centroids"]').val().replace(/ +/g,'');
 			var buff = str.split(',');
 			var samples = [],centroids = [],tmp = [];
@@ -93,6 +96,10 @@
 			}
 			samples.push(tmp);
 			if(str_centroid.length > 0 && (str_centroid != '' || str_centroid != ' ')){
+				if(!str_centroid.match(/[\d,.]/g)){
+					alert('Data centroids haruslah number atau float !!!');
+					return;
+				}
 				tmp = [];
 				buff = str_centroid.split(',');
 				if(buff.length%dim[1] != 0){
@@ -127,34 +134,6 @@
 			$('#samples').replaceWith('<p id="samples">'+t+'</p>');
 			$('#result').replaceWith("<p id='result'>"+res+"</p>");
 		});
-		
-		
-		
-		/*$('#username').focus();
-		$('#password').keypress(function(e){
-			if(e.which == 13 ){
-				$("#btn_login").trigger("click");
-			}
-		});
-		$('#btn_login').click(function(){
-			var data = {
-				user: $('#username').val(),
-				pass: $('#password').val(),
-				remember: $('[name="remember"]').is(':checked')
-			};
-			$.post('c_login/login', {data:JSON.stringify(data)}, function(res){
-				var json = (res?JSON.parse(res):{success:false});
-				if(json.success){
-					$('[name="btn_login"]').find('.modal-body p').text(json.msg);
-					$('[name="btn_login"]').modal('show');
-					var redirect = 'welcome';
-					window.location = redirect;
-					// console.info(json);
-				}else{
-					$('[name="btn_login"]').modal('show');
-				}
-			});
-		});*/
 	});
 </script>
 
