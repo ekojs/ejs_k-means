@@ -1,0 +1,139 @@
+<!DOCTYPE html><html lang='en'><head>
+	<meta charset='utf-8'>
+	<meta http-equiv='X-UA-Compatible' content='IE=edge'>
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
+	
+	<title>EJS K-Means Clustering</title>
+	<meta name='description' content='Penerapan K-Means Clustering' />
+	<meta name='keywords' content='K-Means Clustering,K-Means Algorithm' />
+	<meta name='distribution' content='Global' />
+	<meta name='author' content='Eko Junaidi Salam' />
+	<meta name='Robots' content='index,follow' />
+	
+	<link rel='stylesheet' href='bootstrap.min.css'/>
+	<script type='text/javascript' src='ejs_kmeans.js'></script>
+	<script type='text/javascript' src='jquery-2.1.4.min.js'></script>
+	<script type='text/javascript' src='bootstrap.min.js'></script>
+</head><body><style type='text/css'>
+.form_bg {
+	background-color:#eee;
+	color:#666;
+	padding:20px;
+	border-radius:10px;
+	position: absolute;
+	border:1px solid #fff;
+	margin: auto;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	width: 320px;
+	height: 280px;
+}
+</style>
+<div class='container'>
+	<div class='panel panel-primary'>
+		<div class='panel-heading'><h3 class='text-center'>K-Means Clustering</h2></div>
+		<div class='panel-body'>
+			<h3>Masukkan sumber data</h3>
+			<div class='row'>
+				<div class='col-xs-4 col-sm-4'>
+					<input name='txt_dim' type='text' class='form-control' placeholder='N Dimensions...' value='2'>
+				</div>
+				<div class='col-xs-4 col-sm-4'>
+					<input name='txt_samples' type='text' class='form-control' placeholder='Samples...' value='5.09,5.80,3.24,5.90,1.68,4.90,1.00,3.17,1.48,1.38,2.91,0.20,4.76,0.10,6.32,1.10,7.00,2.83,6.52,4.62'>
+				</div>
+				<div class='col-xs-4 col-sm-4'>
+					<div class='input-group'>
+						<input name='txt_centroids' type='text' class='form-control' placeholder='Centroids...' value='1.48,1.38,4.76,0.10'>
+						<span class='input-group-btn'>
+							<button id='btn_hitung' class='btn btn-default' type='button'>Hitung !!!</button>
+						</span>
+					</div>
+				</div>
+			</div>
+			<br />
+			<p id='samples'></p>
+			<p id='init'></p>
+			<p id='final'></p>
+		</div>
+		<div class='panel-footer text-center'>Created By Eko Junaidi Salam</div>
+	</div>
+</div>
+
+<script>
+	$(function(){		
+		$('#btn_hitung').click(function(){
+			var dim = $('[name="txt_dim"]').val();
+			var str = $('[name="txt_samples"]').val();
+			var str_centroid = $('[name="txt_centroids"]').val();
+			var buff = str.split(',');
+			var samples = [],centroids = [],tmp = [];
+			for(i=0;i<buff.length;i++){
+				if(i != 0 && (i%dim == 0)){
+					samples.push(tmp);
+					tmp = [];
+					tmp.push(parseFloat(buff[i]));
+				}else{
+					tmp.push(parseFloat(buff[i]));
+				}
+			}
+			samples.push(tmp);
+			//console.log(samples);
+			tmp = [];
+			buff = str_centroid.split(',');
+			for(i=0;i<buff.length;i++){
+				if(i != 0 && (i%dim == 0)){
+					centroids.push(tmp);
+					tmp = [];
+					tmp.push(parseFloat(buff[i]));
+				}else{
+					tmp.push(parseFloat(buff[i]));
+				}
+			}
+			centroids.push(tmp);
+			//console.log(centroids);
+			
+			//var samples = [[5.09,5.80], [3.24,5.90], [1.68,4.90], [1.00,3.17], [1.48,1.38], [2.91,0.20], [4.76,0.10], [6.32,1.10], [7.00,2.83], [6.52,4.62]];
+			//var centroids = [[1.48,1.38],[4.76,0.10]];
+			
+			var k_means = new k_mean_cluster(samples);
+			k_means.initialize(centroids);
+			k_means.calculate();
+			var res = k_means.result();
+			$('#samples').replaceWith('Samples Data : ','('+samples.join(') (')+')<br /><br />');
+			$('#init').replaceWith(res);
+		});
+		
+		
+		
+		/*$('#username').focus();
+		$('#password').keypress(function(e){
+			if(e.which == 13 ){
+				$("#btn_login").trigger("click");
+			}
+		});
+		$('#btn_login').click(function(){
+			var data = {
+				user: $('#username').val(),
+				pass: $('#password').val(),
+				remember: $('[name="remember"]').is(':checked')
+			};
+			$.post('c_login/login', {data:JSON.stringify(data)}, function(res){
+				var json = (res?JSON.parse(res):{success:false});
+				if(json.success){
+					$('[name="btn_login"]').find('.modal-body p').text(json.msg);
+					$('[name="btn_login"]').modal('show');
+					var redirect = 'welcome';
+					window.location = redirect;
+					// console.info(json);
+				}else{
+					$('[name="btn_login"]').modal('show');
+				}
+			});
+		});*/
+	});
+</script>
+
+</body>
+</html>
