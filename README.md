@@ -58,4 +58,5 @@ Centroids finalized at:
 
 #### Note:
 Baca artikel pada [`K-Means Clustering Algorithm`](http://ekojunaidisalam.com/2017/02/09/k-means-clustering-algorithm/)
+
 Simulasi program di [`sini`](https://ekojs.github.io/ejs_k-means/)
