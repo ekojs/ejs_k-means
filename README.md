@@ -3,26 +3,30 @@
 ### Penerapan K-Means Clustering pada Javascript
 
 
-### Cara melakukan Test Training pada [`ejs_kmeans.js`](https://github.com/ekojs/matikan/blob/master/ejs_kmeans.js)
+### Cara melakukan Test Training pada [`ejs_kmeans.js`](https://github.com/ekojs/machine_learning/blob/master/unsupervised/ejs_kmeans.js)
 
-#### 1 - UnComment pada baris [221](https://github.com/ekojs/ejs_k-means/blob/master/ejs_kmeans.js#L221)
+#### 1 - Create file tes.js pada folder yg sama dengan file ejs_k-means.js
 ```javascript
-console.log(k_means.result().replace(/<br \/>/g,"\n").replace(/&nbsp;/g,' ').replace(/<\/?strong>/g,''));
-```
+var ejs_kmeans = require('./ejs_kmeans');
+function TestData(samples,centroid){
+	console.log('Samples Data : %s \n','('+samples.join(') (')+')');
+	var k_means = new ejs_kmeans.k_mean_cluster(samples);
+	k_means.initialize(centroid);
+	k_means.calculate();
+	console.log(k_means.result().replace(/<br \/>/g,"\n").replace(/&nbsp;/g,' ').replace(/<\/?strong>/g,''));
+}
 
-#### 2 - UnComment pada salah satu sample data pada baris [224](https://github.com/ekojs/ejs_k-means/blob/master/ejs_kmeans.js#L224)
-```javascript
 TestData([[5.09,5.80], [3.24,5.90], [1.68,4.90], [1.00,3.17], [1.48,1.38], [2.91,0.20], [4.76,0.10], [6.32,1.10], [7.00,2.83], [6.52,4.62]],[[1.48,1.38],[4.76,0.10]]);
-// TestData([[5.09,5.80], [3.24,5.90], [1.68,4.90], [1.00,3.17], [1.48,1.38], [2.91,0.20], [4.76,0.10], [6.32,1.10], [7.00,2.83], [6.52,4.62]],[[5.09,5.80], [3.24,5.90]]);
-// TestData([[1.0,1.0],[1.5,2.0],[3.0,4.0],[5.0,7.0],[3.5,5.0],[4.5,5.0],[3.5,4.5]],[[1,1],[5,7]]);
-// TestData([[1,1],[2,1],[4,3],[5,4]],[[1,1],[2,1]]);
-// TestData([[1,1,2],[2,1,3],[4,3,2],[5,4,4],[4,4,4]],[[1,1,2],[2,1,3]]);
-// TestData([[5.09,5.80], [3.24,5.90], [1.68,4.90], [1.00,3.17], [1.48,1.38], [2.91,0.20], [4.76,0.10], [6.32,1.10], [7.00,2.83], [6.52,4.62]],[[5.09,5.80], [3.24,5.90], [1.68,4.90]]);
+//TestData([[5.09,5.80], [3.24,5.90], [1.68,4.90], [1.00,3.17], [1.48,1.38], [2.91,0.20], [4.76,0.10], [6.32,1.10], [7.00,2.83], [6.52,4.62]],[[5.09,5.80], [3.24,5.90]]);
+//TestData([[1.0,1.0],[1.5,2.0],[3.0,4.0],[5.0,7.0],[3.5,5.0],[4.5,5.0],[3.5,4.5]],[[1,1],[5,7]]);
+//TestData([[1,1],[2,1],[4,3],[5,4]],[[1,1],[2,1]]);
+//TestData([[1,1,2],[2,1,3],[4,3,2],[5,4,4],[4,4,4]],[[1,1,2],[2,1,3]]);
+//TestData([[5.09,5.80], [3.24,5.90], [1.68,4.90], [1.00,3.17], [1.48,1.38], [2.91,0.20], [4.76,0.10], [6.32,1.10], [7.00,2.83], [6.52,4.62]],[[5.09,5.80], [3.24,5.90], [1.68,4.90]]);
 ```
 
 #### 3 - Eksekusi langsung
 ```javascript
-node ejs_kmeans.js
+node tes.js
 ```
 
 #### 4 - Hasilnya kurang lebih akan seperti ini

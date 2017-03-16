@@ -11,7 +11,7 @@
 	<meta name='Robots' content='index,follow' />
 	
 	<link rel='stylesheet' href='bootstrap.min.css'/>
-	<script type='text/javascript' src='ejs_kmeans.js'></script>
+	<script type='text/javascript' src='https://cdn.rawgit.com/ekojs/machine_learning/master/unsupervised/ejs_kmeans.js'></script>
 	<script type='text/javascript' src='jquery-2.1.4.min.js'></script>
 	<script type='text/javascript' src='bootstrap.min.js'></script>
 </head><body><style type='text/css'>
@@ -127,7 +127,8 @@
 			console.log(samples);
 			console.log(centroids);
 			
-			var k_means = new k_mean_cluster(samples);
+			
+			var k_means = new ejs_kmeans.k_mean_cluster(samples);
 			k_means.initialize(centroids);
 			k_means.calculate();
 			var res = k_means.result();
